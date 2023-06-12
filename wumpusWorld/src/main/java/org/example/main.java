@@ -308,10 +308,3 @@ public class main {
         return isGameover;
     }
 }
-
-
-//shoot method 추가 v
-//game over 하면 그상태 그대로 유지한 상태로 다시 진행 (성공할 때까지)
-//stench breeze 추가 v (발표할 때 감지 코드와 함께 추상적 발표)
-//turn right, turn left 수정. (무한루프 빠져나와야한다.)
-
