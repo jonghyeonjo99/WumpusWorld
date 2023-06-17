@@ -39,7 +39,6 @@ public class main {
 
             printCave();
 
-            // Check if agent gets killed by wumpus or pit
             if (cave[agentX][agentY] == WUMPUS || cave[agentX][agentY] == PIT) {
                 isAgentAlive = false;
             }
@@ -49,14 +48,12 @@ public class main {
     private static void initializeCave() {
         Random random = new Random();
 
-        // Initialize the cave with empty cells
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 cave[i][j] = EMPTY;
             }
         }
 
-        // Generate the gold at a random non-(0,0) location
         int goldX, goldY;
         do {
             goldX = random.nextInt(SIZE);
@@ -64,7 +61,6 @@ public class main {
         } while (goldX == 0 && goldY == 0);
         cave[goldX][goldY] = GOLD;
 
-        // Generate the wumpus monster at a random location (excluding (0,0))
         int wumpusX, wumpusY;
         do {
             wumpusX = random.nextInt(SIZE);
@@ -72,7 +68,6 @@ public class main {
         } while (wumpusX == 0 && wumpusY == 0);
         cave[wumpusX][wumpusY] = WUMPUS;
 
-        // Generate the pits at random locations (excluding (0,0))
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 if (cave[i][j] == EMPTY && random.nextDouble() < 0.1 && !(i == 0 && j == 0)) {
@@ -163,20 +158,17 @@ public class main {
     }
 
     private static boolean checkScream() {
-        // Assume the agent never shoots the arrow
 
         return false;
     }
 
     private static String selectAction(boolean stench, boolean breeze, boolean glitter, boolean bump, boolean scream) {
-        // Implement the agent's rational behavior to select the appropriate action based on the sensor inputs
         if (glitter) {
             return "Grab";
         } else if (stench) {
             System.out.println("stench");
             return "Shoot";
         } else if (bump) {
-            // Handle bumping into a wall
             return "TurnRight";
         } else if (agentX == 0 && agentY == 0 && hasGold) {
             return "Climb";
@@ -184,13 +176,11 @@ public class main {
             System.out.println("breeze");
             return "GoForward";
         } else {
-            // Default action: GoForward
             return "GoForward";
         }
     }
 
     private static void performAction(String action) {
-        // Perform the action based on the agent's chosen action
         switch (action) {
             case "GoForward":
                 goForward();
@@ -214,7 +204,6 @@ public class main {
     }
 
     private static void goForward() {
-        // Move the agent forward if it's not blocked by a wall
         if (agentX > 0 && !visited[agentX - 1][agentY]) {
             agentX--;
         } else if (agentX < SIZE - 1 && !visited[agentX + 1][agentY]) {
@@ -228,8 +217,6 @@ public class main {
     }
 
     private static void turnLeft() {
-        // Rotate the agent 90 degrees to the left
-        // East -> North -> West -> South -> East
         if (agentX == 0 && agentY == 0) {
             agentX = 1;
             agentY = 0;
@@ -246,8 +233,6 @@ public class main {
     }
 
     private static void turnRight() {
-        // Rotate the agent 90 degrees to the right
-        // East -> South -> West -> North -> East
         if (agentX == 0 && agentY == 0) {
             agentX = 0;
             agentY = 1;
@@ -264,7 +249,6 @@ public class main {
     }
 
     private static void grab() {
-        // Grab the gold if it's present in the current cell
         if (cave[agentX][agentY] == GOLD) {
             cave[agentX][agentY] = EMPTY;
             hasGold = true;
@@ -272,7 +256,6 @@ public class main {
     }
 
     private static void shoot() {
-        // Shoot action: Make the Wumpus disappear if it is in the agent's line of sight
         if (agentX > 0 && cave[agentX - 1][agentY] == WUMPUS) {
             cave[agentX - 1][agentY] = EMPTY;
         } else if (agentX < SIZE - 1 && cave[agentX + 1][agentY] == WUMPUS) {
@@ -285,7 +268,6 @@ public class main {
     }
 
     private static void climb() {
-        // Exit the cave if the agent has acquired the gold and returned to the (1,1) starting cell
         if (agentX == 0 && agentY == 0 && hasGold) {
             isGameover = true;
             not_gold = true;
@@ -294,7 +276,6 @@ public class main {
     }
 
     private static boolean checkGameover() {
-        // Check if the game is over based on game-ending conditions
         if (visited[0][0] && hasGold) {
             isGameover = true;
             System.out.println("Game over: Agent found the gold and returned to (1,1)!");
